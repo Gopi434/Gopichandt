@@ -15,7 +15,7 @@ export const PROFILE = {
   /** Photo URL (or a file in /public). If it fails to load, a placeholder is shown. */
   portrait: "Gallery/Branding/MainImg.jpg",
   logo: "Gallery/Branding/Logo.svg",
-  portfolioUrl: "https://www.behance.net/",
+  portfolioUrl: "https://www.behance.net/gopichandtlr",
   intro: {
     greeting: "Hi👋 I'm",
     name: "Gopichand",
