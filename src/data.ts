@@ -19,7 +19,7 @@ export const PROFILE = {
   intro: {
     greeting: "Hi👋 I'm",
     name: "Gopichand",
-    role: "Sr. UI/UX and Multimedia Designer",
+    role: "Sr. UI/UX & Multidisciplinary Designer",
     text: "Whether it’s a digital product or a marketing creative, I focus on solving problems and communicating ideas through design.",
   },
 };
