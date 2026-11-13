@@ -1,0 +1,318 @@
+:root{--bg:#111111;--ink:#F2F2F2;--mute:#9b9b9b;--acc:#ffffff;--panel:#1E1E1E;--line:rgba(255,255,255,.16);--ease:cubic-bezier(.76,0,.24,1);--out:cubic-bezier(.16,1,.3,1);box-sizing:border-box}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-snap-type:y proximity}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:4px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:var(--bg);padding:8px;z-index:20}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+nav{position:fixed;inset:0 0 auto 0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:calc(20px + env(safe-area-inset-top,0px)) clamp(16px,3vw,44px) 34px;font-size:14px;pointer-events:none}
+nav>*{pointer-events:auto}
+nav{transition:transform .3s var(--ease),opacity .22s ease}
+nav.away{transform:translateY(-70px);opacity:0}nav.away>*{pointer-events:none}
+.brand{display:flex;align-items:center;gap:16px}
+.sep{display:block;flex:none;width:1px;height:18px;background:rgba(255,255,255,.16)}
+.logo{display:block;line-height:0}.logo img{height:32px;width:auto;display:block}
+.contact{display:flex;align-items:center;gap:0}
+.soc-wrap{display:flex;align-items:center}
+.contact .sep{margin:0 6px}
+.contact a.soc{width:38px;height:38px;display:grid;place-items:center;padding:0}
+.soc img,.menu img{width:18px;height:18px;display:block;flex:none;filter:brightness(0) invert(1);opacity:.75;transition:opacity .3s}
+.contact a.soc:hover img,.menu a:hover img{opacity:1}
+/* email / phone: plain selectable text, highlight on hover, click copies */
+.cp{position:relative;display:inline-flex;align-items:center;height:38px;padding:0 12px;border-radius:10px;color:#bdbdbd;font-size:14px;white-space:nowrap;cursor:pointer;user-select:text;-webkit-user-select:text;transition:color .3s,background .3s}
+.cp:hover{color:#fff;background:rgba(255,255,255,.12)}
+.cp-ic{width:18px;height:18px;margin-right:8px;flex:none;filter:brightness(0) invert(1);opacity:.75;transition:opacity .3s}
+.cp:hover .cp-ic{opacity:1}
+.copied{position:absolute;left:50%;top:calc(100% + 6px);transform:translate(-50%,-4px);padding:6px 12px;border-radius:8px;background:#2e2e2e;color:#fff;font-size:14px;font-weight:400;line-height:1.2;opacity:0;pointer-events:none;user-select:none;transition:opacity .2s,transform .3s var(--out)}
+.copied.on{opacity:1;transform:translate(-50%,0)}
+/* rotating phrases next to the logo: same look as the skill / tool chips */
+.ticker{position:relative;display:inline-flex;align-items:center;gap:6px;padding:0;background:none;color:#b4b4b4;font-size:15px;font-weight:700;line-height:1.5;overflow:hidden;white-space:nowrap}
+.tk-n,.tk-w{display:inline-block}
+.ticker.in .tk-n{animation:tkUpIn .4s var(--out) backwards}
+.ticker.in .tk-w{animation:tkDownIn .4s var(--out) backwards}
+.ticker.out .tk-n{animation:tkUpOut .32s cubic-bezier(.5,0,.75,0) forwards}
+.ticker.out .tk-w{animation:tkDownOut .32s cubic-bezier(.5,0,.75,0) forwards}
+@keyframes tkUpOut{to{transform:translateY(-120%);opacity:0}}
+@keyframes tkDownOut{to{transform:translateY(120%);opacity:0}}
+@keyframes tkUpIn{from{transform:translateY(120%);opacity:0}}
+@keyframes tkDownIn{from{transform:translateY(-120%);opacity:0}}
+.contact a,.menu-btn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;color:#bdbdbd;text-decoration:none;transition:color .3s,background .3s}
+.contact a:hover{color:#fff;background:rgba(255,255,255,.12)}
+.menu-wrap{display:none;position:relative}
+.menu-btn{border:0;background:rgba(255,255,255,.1);color:#fff;cursor:pointer}
+.bars{display:flex;flex-direction:column;gap:5px}
+.bars i{display:block;width:18px;height:1.5px;background:#fff;border-radius:2px;transition:transform .45s var(--out),opacity .25s}
+.menu-wrap.open .bars i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.menu-wrap.open .bars i:nth-child(2){opacity:0}
+.menu-wrap.open .bars i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.menu{position:absolute;right:0;top:calc(100% + 10px);min-width:min(280px,calc(100vw - 32px));display:flex;flex-direction:column;gap:2px;padding:8px;background:#161616;border:1px solid rgba(255,255,255,.14);border-radius:16px;opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top right;transition:opacity .3s,transform .4s var(--out),visibility 0s .3s}
+.menu-wrap.open .menu{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .4s var(--out)}
+.menu a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;color:#e6e6e6;text-decoration:none;font-size:14px;transition:background .25s}
+.menu a:hover,.menu .cp:hover{background:rgba(255,255,255,.08)}
+.menu .cp{height:auto;padding:12px 14px;color:#e6e6e6;border-radius:10px}
+.menu .copied{top:50%;left:auto;right:12px;transform:translate(0,-50%)}.menu .copied.on{transform:translate(0,-50%)}
+.snap{height:100vh;height:100dvh;scroll-snap-align:start}
+.stage{position:fixed;inset:0;background:#1E1E1E;display:grid;grid-template-columns:minmax(0,min(47vw,calc(100dvh - 164px))) minmax(0,600px);column-gap:clamp(24px,3.4vw,56px);justify-content:center;align-content:center;padding:56px 24px 86px;overflow:hidden}
+
+/* ---- left: frames + travelling photo ---- */
+.left{contain:paint;position:relative;z-index:1;aspect-ratio:1;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:transform .3s var(--ease),opacity .22s ease}
+.box{position:relative;width:96%;aspect-ratio:1}
+.frame,.ov{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;overflow:visible;pointer-events:none}
+.frame{opacity:0;transition:opacity .35s}
+.frame.on{opacity:.9;transition:opacity .4s .2s}
+.frame *{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .45s var(--ease)}
+.frame.on *{stroke-dashoffset:0;transition:stroke-dashoffset .8s var(--out) .25s}
+.frame.on>:nth-child(2){transition-delay:.3s}.frame.on>:nth-child(3){transition-delay:.35s}.frame.on>:nth-child(4){transition-delay:.4s}
+.frame.on>:nth-child(5){transition-delay:.45s}.frame.on>:nth-child(6){transition-delay:.5s}.frame.on>:nth-child(7){transition-delay:.55s}.frame.on>:nth-child(n+8){transition-delay:.6s}
+.photo{position:absolute;overflow:hidden;background:#2a2a2a;will-change:left,top,width,height;
+  transition:left .9s var(--ease),top .9s var(--ease),width .9s var(--ease),height .9s var(--ease),border-radius .9s var(--ease),transform .9s var(--ease)}
+.photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 18%;opacity:0;transition:opacity .7s ease}
+.photo img.ready{opacity:1}
+
+/* ---- loop layer: keeps moving while a stage is active ---- */
+.ov{opacity:0;transition:opacity .3s .35s}.ov.on{opacity:1;transition:opacity .5s .45s}
+.ov *{transform-box:fill-box;transform-origin:center;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+.ov .orbit{transform-box:view-box;transform-origin:50% 50%;animation:spin 5.85s linear infinite}
+.ov .orbit.slow{animation-duration:30s}.ov .orbit.rev{animation-direction:reverse;animation-duration:7s}
+.ring{animation:ring 2.4s ease-out infinite}.ring.d2{animation-delay:.8s}.ring.d3{animation-delay:1.6s}
+.blip{animation:blip 1.69s ease-in-out infinite}
+.cursor{animation:cursor 4.55s ease-in-out infinite}
+.bar{transform-origin:50% 100%;animation:bar 2.99s ease-in-out infinite}
+.gline{stroke-dasharray:1;animation:gline 3.25s ease-in-out infinite}
+.wedge{animation:wedge 2.6s ease-in-out infinite}
+.clip{opacity:0;animation:clipin 5s ease-out .35s infinite}
+.wave{transform-origin:50% 50%;opacity:.7;animation:wave 0.91s ease-in-out infinite}
+.phead{opacity:0;animation:phead 5s linear .35s infinite}
+.vplay{opacity:1;animation:vplay 5s linear .35s infinite}
+.vpause{opacity:0;animation:vpause 5s linear .35s infinite}
+.cursor{animation:cursor 4.55s ease-in-out infinite}
+.pop{animation:pop 1.69s ease-in-out infinite}
+.rise{animation:rise 1.69s ease-out infinite;opacity:0}.rise.r2{animation-delay:1.3s}
+.head{animation:head 2.93s linear infinite}
+.dia{animation:dia 2.93s ease-out infinite}
+.type{transform-origin:0 50%;animation:type 5.85s ease-out infinite;opacity:0}
+.load{transform-origin:0 50%;animation:load 2.08s ease-in-out infinite}
+.done{animation:done 5.85s ease-out infinite;opacity:0}
+.sat{offset-rotate:0deg;animation:sat 4.55s linear infinite}
+/* 3D: one quick 7s loop. flat square draws -> skews into a cube face -> top/right faces unfold -> camera + torch draw in, beam + hatching -> all trims away, square flattens, repeat */
+.sq3,.f3d,.cam3,.cam3 *,.torch3 *,.ray3,.hat3{stroke-dasharray:1;opacity:0}
+.ov .sq3{transform-box:view-box;transform-origin:160px 250px;animation:k-sq 7s .5s infinite}
+.f3d{animation:k-face 7s .5s infinite}
+.cam3,.cam3 *{animation:k-cam 7s .5s infinite}
+.torch3 *{animation:k-torch 7s .5s infinite}
+.ray3{animation:k-ray 7s .5s infinite}
+.hat3{animation:k-hat 7s .5s infinite}
+@keyframes k-sq{
+  0%,5%{opacity:0;stroke-dashoffset:1;transform:skewY(0)}5.1%{opacity:1;stroke-dashoffset:1;transform:skewY(0)}
+  12%,13%{opacity:1;stroke-dashoffset:0;transform:skewY(0);animation-timing-function:cubic-bezier(.5,0,.2,1)}
+  23%,86%{opacity:1;stroke-dashoffset:0;transform:skewY(30deg);animation-timing-function:cubic-bezier(.6,0,.3,1)}
+  95%{opacity:1;stroke-dashoffset:0;transform:skewY(0)}
+  98%{opacity:1;stroke-dashoffset:-1;transform:skewY(0)}98.1%,100%{opacity:0;stroke-dashoffset:-1;transform:skewY(0)}}
+@keyframes k-face{0%,16%{opacity:0;stroke-dashoffset:1}16.1%{opacity:1;stroke-dashoffset:1}30%,78%{opacity:1;stroke-dashoffset:0}90%{opacity:1;stroke-dashoffset:-1}90.1%,100%{opacity:0;stroke-dashoffset:-1}}
+@keyframes k-cam{0%,24%{opacity:0;stroke-dashoffset:1}24.1%{opacity:1;stroke-dashoffset:1}36%,78%{opacity:1;stroke-dashoffset:0}90%{opacity:1;stroke-dashoffset:-1}90.1%,100%{opacity:0;stroke-dashoffset:-1}}
+@keyframes k-torch{0%,26%{opacity:0;stroke-dashoffset:1}26.1%{opacity:1;stroke-dashoffset:1}38%,78%{opacity:1;stroke-dashoffset:0}90%{opacity:1;stroke-dashoffset:-1}90.1%,100%{opacity:0;stroke-dashoffset:-1}}
+@keyframes k-ray{0%,38%{opacity:0;stroke-dashoffset:1}38.1%{opacity:1;stroke-dashoffset:1}45%,78%{opacity:1;stroke-dashoffset:0}88%{opacity:1;stroke-dashoffset:-1}88.1%,100%{opacity:0;stroke-dashoffset:-1}}
+@keyframes k-hat{0%,40%{opacity:0;stroke-dashoffset:1}40.1%{opacity:1;stroke-dashoffset:1}54%,76%{opacity:1;stroke-dashoffset:0}90%{opacity:1;stroke-dashoffset:-1}90.1%,100%{opacity:0;stroke-dashoffset:-1}}
+@media (prefers-reduced-motion:no-preference){
+  .cstatic{display:none}
+}
+.pkt{offset-rotate:0deg;animation:sat 1.43s linear infinite}
+.flash{animation:flash 1.56s linear infinite}
+.chk{stroke-dasharray:1;animation:chk 1.95s ease-in-out infinite}
+@keyframes ring{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.14);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blip{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.5);opacity:.35}}
+@keyframes cursor{0%,100%{transform:translate(330px,322px)}25%{transform:translate(410px,236px)}45%{transform:translate(220px,330px)}70%{transform:translate(440px,300px)}}
+@keyframes bar{0%{transform:scaleY(.04)}30%,55%{transform:scaleY(1)}75%{transform:scaleY(.6)}100%{transform:scaleY(.04)}}
+@keyframes gline{0%{stroke-dashoffset:1}45%,75%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+@keyframes wedge{0%,100%{transform:translate(0,0)}50%{transform:translate(6px,-3.5px)}}
+@keyframes clipin{0%{transform:translateX(var(--dx));opacity:0}12%{opacity:1}30%,88%{transform:none;opacity:1}100%{transform:none;opacity:0}}
+@keyframes wave{50%{transform:scaleY(.35)}}
+@keyframes phead{0%,50%{transform:translateX(0);opacity:0}52%{opacity:1}88%{transform:translateX(380px);opacity:1}92%,100%{transform:translateX(380px);opacity:0}}
+@keyframes vplay{0%,49.9%{opacity:1}50%,92%{opacity:0}92.1%,100%{opacity:1}}
+@keyframes vpause{0%,49.9%{opacity:0}50%,92%{opacity:1}92.1%,100%{opacity:0}}
+@keyframes pop{0%,100%{transform:scale(1)}12%{transform:scale(1.45)}28%{transform:scale(1)}}
+@keyframes rise{0%{transform:translateY(0) scale(.5);opacity:0}15%{opacity:1}100%{transform:translateY(-70px) scale(1.1);opacity:0}}
+@keyframes head{from{transform:translateX(0)}to{transform:translateX(440px)}}
+@keyframes dia{0%,100%{transform:scale(1)}8%{transform:scale(2)}30%{transform:scale(1)}}
+@keyframes blink{50%{opacity:.15}}
+@keyframes type{0%{transform:scaleX(0);opacity:1}12%,90%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes load{0%{transform:scaleX(0);opacity:1}70%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes done{0%,60%{opacity:0;transform:scale(.6)}68%{opacity:1;transform:scale(1.15)}72%,90%{opacity:1;transform:scale(1)}97%,100%{opacity:0;transform:scale(1)}}
+@keyframes shadow{50%{transform:scaleX(.82);opacity:.15}}
+@keyframes sat{from{offset-distance:0%}to{offset-distance:100%}}
+@keyframes hdl{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.9);opacity:1}}
+@keyframes flash{0%,100%{opacity:.15}8%{opacity:1}18%{opacity:.25}28%{opacity:1}50%{opacity:.15}}
+@keyframes chk{0%{stroke-dashoffset:1}40%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+@keyframes bob{50%{translate:0 -9px}}
+
+/* ---- full-screen gallery shown while "View Works" is hovered ---- */
+.gal{position:absolute;inset:0;z-index:0;background:#1E1E1E;opacity:0;visibility:hidden;transform:scale(1.04);pointer-events:none;
+  transition:opacity .22s ease,transform .3s var(--out),visibility 0s .22s}
+.gal.on{opacity:1;visibility:visible;transform:none;transition:opacity .22s ease,transform .3s var(--out)}
+.gl{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .1s linear,visibility 0s .1s}
+.gl.cur{opacity:1;visibility:visible;transition:opacity .1s linear}
+.gl:not(.cur) .col{animation-play-state:paused}
+.cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:100%;gap:14px;padding:0 14px;overflow:hidden}
+.gal::before,.gal::after{content:"";position:absolute;left:0;right:0;height:14%;z-index:2;pointer-events:none}
+.gal::before{top:0;background:linear-gradient(#1E1E1E,rgba(30,30,30,0))}.gal::after{bottom:0;background:linear-gradient(rgba(30,30,30,0),#1E1E1E)}
+.col{display:flex;flex-direction:column;gap:14px;border-radius:0;padding-bottom:14px;align-self:start;animation:coldown linear infinite;will-change:transform}
+.col.up{animation-name:colup}
+.gal:not(.on) .col{animation-play-state:paused}
+.col .blank{display:block;width:100%;aspect-ratio:1;border-radius:0;background:#2a2a2a}
+.col img{width:100%;height:auto;aspect-ratio:1 / 1;object-fit:cover;border-radius:0;display:block;background:#2a2a2a}
+@keyframes colup{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@keyframes coldown{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+
+/* ---- right: editorial text ---- */
+.right{position:relative;z-index:1;display:flex;align-items:center;min-width:0}
+.slides{position:relative;width:100%;height:100%;container-type:inline-size}
+.slide{text-shadow:0 0 12px #1E1E1E,0 0 4px #1E1E1E;position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s .35s}
+.slide.on{opacity:1;visibility:visible;transition:opacity .2s,visibility 0s}
+.slide.on>*{animation:rise-in .7s var(--out) backwards}
+.slide.on>:nth-child(1){animation-delay:.15s}.slide.on>:nth-child(2){animation-delay:.22s}.slide.on>:nth-child(3){animation-delay:.29s}
+.slide.on>:nth-child(4){animation-delay:.36s}.slide.on>:nth-child(5){animation-delay:.43s}.slide.on>:nth-child(6){animation-delay:.5s}
+.slide>*{transition:transform .3s var(--ease),opacity .22s ease}
+@keyframes rise-in{from{opacity:0;transform:translateY(26px)}}
+h2,.hero{margin:0;font-weight:800;letter-spacing:-.04em;line-height:.95}
+.hero{font-size:clamp(30px,6vw,76px);font-size:min(11.2cqw,11dvh,84px);text-wrap:balance}
+h2{letter-spacing:-.03em;font-weight:800;font-size:clamp(34px,6vw,88px);font-size:min(12.8cqw,12dvh,96px);text-wrap:balance}
+h2.tag{display:block;align-self:flex-start;margin:0 0 8px;padding:0;background:none;border-radius:0;color:#b4b4b4;font-size:clamp(17px,1.5vw,22px);font-weight:500;letter-spacing:0;line-height:1.2;text-wrap:wrap}
+.desc:not(.intro){color:#fff}
+.desc.intro{max-width:none;white-space:pre-line}
+.desc{font-family:'Caveat','Segoe Script',cursive;font-weight:600;font-size:44px;letter-spacing:-.5px;line-height:50px;color:var(--mute);max-width:48ch;margin:14px 0 0}
+.lists{margin-top:24px;width:100%;display:flex;flex-direction:column;gap:28px}
+.chips{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.chips li{display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 12px;border-radius:8px;background:rgba(255,255,255,.07);color:#b4b4b4;font-size:15px;font-weight:400;line-height:1.2}
+.chips svg.star{flex:none;color:#e8e8e8}
+.chips img{flex:none;width:22px;height:22px;display:block;opacity:.92}
+.btn{text-shadow:none;position:relative;margin-top:32px;display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:600;font-size:15px;padding:10px 15px 10px 18px;border-radius:10px;background:#d9d9d9;color:#161616;text-decoration:none;cursor:pointer;transition:background .3s,color .3s,transform .8s var(--ease),opacity .5s var(--ease)}
+.btn:hover,.btn:focus-visible{background:rgba(255,255,255,.07);color:#fff}
+.btn .ext{transition:transform .4s var(--out)}.btn:hover .ext,.btn:focus-visible .ext{transform:translate(2px,-2px)}
+
+.stage.paused *,.stage.paused *::before,.stage.paused *::after{animation-play-state:paused!important}
+.stage.paused .slide *{animation-play-state:running!important}
+
+/* ---- foreground flies out: logo/contacts up, dock down, text right, animation left ---- */
+.stage.peek .left{transform:translateX(-90px);opacity:0}
+.stage.peek .slide.on>*{transform:translateX(90px);opacity:0;pointer-events:none}
+
+/* ---- Figma-style bottom dock: three separate blocks ---- */
+.dock{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;display:flex;align-items:center;transition:transform .3s var(--ease),opacity .22s ease}
+.dock.away{transform:translate(-50%,90px);opacity:0;pointer-events:none}
+.dk-block{display:flex;align-items:center;gap:2px;padding:4px;border-radius:10px;background:#141414;border:1px solid rgba(255,255,255,.1)}
+/* three blocks, always 8px apart. The home block's width AND its 8px gap collapse together, so spacing stays equal in both states. */
+.dk-home{flex:none;width:50px;margin-right:8px;overflow:hidden;transition:width .6s var(--out),margin-right .6s var(--out),opacity .4s var(--out)}
+.dk-home .dk-block{width:50px;justify-content:center}
+.dock.intro .dk-home{width:0;margin-right:0;opacity:0;pointer-events:none}
+/* play / pause: a slot that collapses in the intro (same motion as home), so the bar re-centres smoothly. The tooltip lives outside the clipped part. */
+.dk-slot{position:relative;flex:none;width:50px;margin-left:8px;transition:width .6s var(--out),margin-left .6s var(--out)}
+.dk-play{overflow:hidden;width:100%;transition:opacity .4s var(--out)}
+.dk-play .dk-block{width:50px;justify-content:center}
+.dock.intro .dk-slot{width:0;margin-left:0;pointer-events:none}
+.dock.intro .dk-play{opacity:0}
+.keytip{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translate(-50%,6px);display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;background:#2e2e2e;color:#fff;font-size:14px;font-weight:400;line-height:1.2;white-space:nowrap;opacity:0;pointer-events:none;user-select:none;transition:opacity .2s,transform .3s var(--out)}
+.keytip.on{opacity:1;transform:translate(-50%,0)}
+.keytip kbd,.kh kbd{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 5px;border-radius:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.26);box-shadow:0 2px 0 rgba(255,255,255,.14);color:#fff;font:inherit;font-weight:600;font-size:13px}
+@media (hover:none){.keytip{display:none}}
+.dk-mid{gap:20px}
+.dk-btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;height:40px;min-width:40px;padding:0 9px;border:0;border-radius:10px;background:transparent;color:rgba(255,255,255,.7);font:inherit;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;transition:background .35s var(--out),color .3s,padding .45s var(--out)}
+.dk-btn svg{display:block;width:22px;height:22px;flex:none;pointer-events:none}
+.dk-ic{display:block;flex:none;line-height:0}
+.dk-ic svg{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;overflow:visible;transform:scale(var(--s,1))}
+/* label: the button grows from a square into a pill as the label track opens from 0fr to 1fr */
+.lblw{display:grid;grid-template-columns:0fr;margin-left:0;transition:grid-template-columns .45s var(--out),margin-left .45s var(--out)}
+.lbl{min-width:0;overflow:hidden;opacity:0;transition:opacity .2s}
+.dk-btn:hover,.dk-btn.on{background:rgba(255,255,255,.1);color:#fff;padding-right:15px}
+.dk-btn:hover .lblw,.dk-btn.on .lblw{grid-template-columns:1fr;margin-left:9px}
+.dk-btn:hover .lbl,.dk-btn.on .lbl{opacity:1;transition:opacity .35s .1s}
+.dk-btn.sq{width:40px;padding:0}
+.dk-btn.sq:hover{padding:0}
+.dk-btn:focus-visible{outline-offset:2px}
+/* progress lives INSIDE the active button (clipped by its rounded corners) */
+.dk-prog{position:absolute;left:0;right:0;top:0;height:1.5px;pointer-events:none;background:rgba(255,255,255,.14)}
+.fill{display:block;height:100%;width:100%;background:#fff;transform-origin:left;transform:scaleX(0);animation:fillbar linear forwards}
+@keyframes fillbar{to{transform:none}}
+/* hover / active icon: a "trim path" draw-on, every shape staggered by --d (see DockIcons.tsx) */
+.tp{stroke-dasharray:1;stroke-dashoffset:0}
+.dk-btn:hover .tp,.dk-btn.on .tp{animation:trim .85s var(--out) backwards;animation-delay:calc(var(--d,0)*.12s)}
+.dock.held .tp{animation-play-state:paused}
+@keyframes trim{from{stroke-dashoffset:1.08}}
+
+/* ---- cursor reveal: full-screen tiles + hidden visual + close ring ---- */
+.rv{position:fixed;inset:0;z-index:30;pointer-events:none}
+.rv.on{pointer-events:auto;cursor:default}
+.rv.peek:not(.on) canvas{visibility:hidden}
+.rv canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* hint: the single trigger column on the right edge, every middle tile gets a gradient outline that sweeps round it now and then */
+@property --a{syntax:"<angle>";initial-value:0deg;inherits:false}
+.rv-hint{position:absolute;inset:0;pointer-events:none;transition:opacity .4s}
+.rv.on .rv-hint,.rv.peek .rv-hint{opacity:0}
+.rv-hint i{position:absolute;left:0;padding:1px;border-radius:4px;opacity:0;
+  background:conic-gradient(from var(--a),rgba(255,255,255,0) 0 62%,rgba(255,255,255,.55) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  animation:hint 10s ease-in-out infinite;animation-delay:calc(var(--i,0)*90ms)}
+/* the trigger column only exists (and so is only hinted) above 1024px */
+@media (max-width:1024px){.rv-hint{display:none}}
+/* a 10s cycle: one calm ~2.5s sweep round each tile, then rest */
+@keyframes hint{0%{--a:0deg;opacity:0}4%{opacity:.6}29%{--a:360deg;opacity:.6}36%,100%{--a:360deg;opacity:0}}
+.rv-close{position:absolute;right:clamp(16px,2.4vw,36px);bottom:calc(clamp(16px,2.4vw,36px) + env(safe-area-inset-bottom,0px));width:54px;height:54px;padding:0;border:0;border-radius:50%;background:#fff;color:#111;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.12);opacity:0;visibility:hidden;transform:scale(.8);transition:opacity .4s ease,transform .5s var(--out),visibility 0s .4s,box-shadow .3s}
+.rv-close.show{opacity:1;visibility:visible;transform:none;transition:opacity .5s ease .2s,transform .6s var(--out) .2s,visibility 0s,box-shadow .3s}
+.rv-close:hover{box-shadow:0 10px 28px rgba(0,0,0,.22),0 3px 8px rgba(0,0,0,.14)}
+.rv-close svg{display:block;width:100%;height:100%;transform:rotate(-90deg)}
+.rv-close circle{fill:none;stroke-width:2.2}
+.rv-close .arc{stroke:#111;stroke-linecap:round;stroke-dasharray:117;stroke-dashoffset:0;animation:rvring linear forwards;animation-delay:.2s}
+.rv-close .x{fill:none;stroke:#111;stroke-width:2;stroke-linecap:round;transform:rotate(90deg);transform-origin:24px 24px}
+/* the two halves of the page while the screen splits open / merges back (made by Reveal.tsx) */
+.rv-half{position:fixed;inset:0;overflow:hidden;pointer-events:none;will-change:transform}
+.rv-open .fg{opacity:0}
+@keyframes rvring{from{stroke-dashoffset:0}to{stroke-dashoffset:117}}
+
+@media (max-width:900px){.contact{display:none}.menu-wrap{display:block}}
+@media (max-width:640px){.logo img{height:26px}.brand{gap:10px}.ticker{font-size:13px}}
+@media (max-height:560px){
+  nav{padding-top:12px;padding-bottom:12px}.logo img{height:26px}
+  .desc{margin-top:10px;font-size:34px;line-height:38px}.lists{margin-top:14px;gap:8px}
+  .btn{margin-top:16px;font-size:14px}
+  .chips li{font-size:12px;padding:4px 10px 4px 8px}
+}
+/* phones + tablets (width up to 1024px): stacked layout (animation on top, text below). Width only, so DevTools touch emulation cannot change it. */
+@media (max-width:1024px){
+  .stage{grid-template-columns:minmax(0,1fr);grid-template-rows:46vh 1fr;grid-template-rows:46dvh 1fr;justify-content:stretch;align-content:stretch;row-gap:0;padding:0}
+  .left{aspect-ratio:auto;padding:calc(76px + env(safe-area-inset-top,0px)) 0 14px}
+  .box{width:min(94%,calc(46vh - 92px));width:min(94%,calc(46dvh - 92px))}
+  .right{align-items:flex-start;padding:20px clamp(20px,5vw,48px) 0}
+  .slides{height:calc(54vh - 112px);height:calc(54dvh - 112px);max-width:640px}.slide{justify-content:flex-start}
+  .btn{margin-top:18px}.desc{margin-top:10px;font-size:36px;line-height:42px}.lists{margin-top:14px}
+  .chips li{font-size:13px;padding:5px 11px 5px 9px}.lists{gap:24px}
+  .stage.peek .left{transform:translateX(-60px)}
+}
+@media (max-width:420px),(max-width:1024px) and (max-height:700px){
+  .desc{font-size:28px;line-height:32px}h2.tag{font-size:14px}.chips{gap:6px}.chips li{font-size:12px;padding:4px 9px 4px 7px}.chips img{width:18px;height:18px}.btn{font-size:15px;margin-top:14px}
+  .lists{gap:16px}
+}
+@media (max-height:560px) and (max-width:1024px){
+  .left{padding:56px 0 8px}
+  .box{width:min(94%,calc(46dvh - 64px))}
+}
+/* small screens: icon-only dock, the active section is shown by its highlight + progress bar */
+@media (max-width:640px){
+  .lblw{display:none}
+  .dk-btn,.dk-btn:hover,.dk-btn.on{min-width:34px;height:36px;padding:0 6px}
+  .dk-btn.sq,.dk-btn.sq:hover{width:36px;padding:0}
+  .dk-btn svg{width:20px;height:20px}
+  .dk-block{padding:3px;gap:1px}.dk-home,.dk-home .dk-block,.dk-slot,.dk-play .dk-block{width:44px}.dk-home{margin-right:6px}.dk-slot{margin-left:6px}
+  .dk-mid{gap:3px}.keytip{left:auto;right:0;transform:translate(0,6px)}.keytip.on{transform:none}.dock{bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01s!important;transition-delay:0s!important;animation:none!important}html{scroll-snap-type:none}.fill{transform:none}.clip{opacity:1}.type,.rise,.ripple,.done,.guide{opacity:1}}
+
+/* first-load keyboard hint (bottom right): four keys visible together, pressed one after another */
+.kh{position:fixed;right:clamp(16px,2.4vw,36px);bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:5;display:grid;grid-template-columns:repeat(3,28px);grid-template-areas:". up ." "left down right";gap:5px;pointer-events:none;animation:khBox 4s var(--out) 2s both}
+.kh kbd{width:28px;height:28px;min-width:0;padding:0;border-radius:6px;animation:khKey .4s ease-in-out both;animation-delay:calc(var(--n) * .45s + 2.7s)}
+.kh svg{width:14px;height:14px;display:block}
+.kh .u{grid-area:up}.kh .l{grid-area:left}.kh .d{grid-area:down}.kh .rr{grid-area:right}
+@keyframes khBox{0%{opacity:0;transform:translateY(20px)}10%{opacity:1;transform:none}86%{opacity:1;transform:none}100%{opacity:0;transform:translateY(20px)}}
+@keyframes khKey{0%,100%{transform:none;background:rgba(255,255,255,.12);box-shadow:0 2px 0 rgba(255,255,255,.14)}50%{transform:translateY(2px) scale(.92);background:rgba(255,255,255,.42);box-shadow:0 0 0 rgba(255,255,255,0)}}
+@media (hover:none),(prefers-reduced-motion:reduce){.kh{display:none}}
